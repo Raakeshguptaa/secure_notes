@@ -1,8 +1,8 @@
-from pydantic import BaseModel
+from pydantic import BaseModel , EmailStr
 
 class User_model(BaseModel):
     id:int
-    username:str
+    username:EmailStr
     password:str
 
     class Config:

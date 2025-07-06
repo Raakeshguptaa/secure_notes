@@ -11,7 +11,7 @@ app = FastAPI()
 def add_user(user_data:User_model,db: Session = Depends(get_db)):
     user_data = User(
         username = user_data.username,
-        password = user_data.password
+        password = user_data.password,
     )
 
     db.add(user_data)
@@ -29,6 +29,18 @@ def add_note(user_notes:Note_model , db:Session= Depends(get_db)):
 
     db.add(user_notes)
     db.commit()
+
+@app.get("/user_detail",status_code=status.HTTP_302_FOUND)
+def user_detail(db:Session = Depends(get_db)):
+
+    data = db.query(User).all()
+
+    return ("user_detail",data)
+
+@app.get("/note_detail",status_code=status.HTTP_302_FOUND)
+def post_detail(db:Session = Depends(get_db)):
+    data = db.query(Note).all()
+    return ("note_detail",data)
 
 
 
