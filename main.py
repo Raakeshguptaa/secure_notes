@@ -3,7 +3,10 @@ from models import User,Note
 from database import get_db
 from sqlalchemy.orm import Session
 from schemas import User_model ,Note_model
+from passlib.context import CryptContext
 
+
+pwd_context = CryptContext(schemes=["bcrypt"],deprecated="auto")
 
 app = FastAPI()
 
@@ -11,7 +14,7 @@ app = FastAPI()
 def add_user(user_data:User_model,db: Session = Depends(get_db)):
     user_data = User(
         username = user_data.username,
-        password = user_data.password,
+        password = pwd_context.hash(user_data.password)
     )
 
     db.add(user_data)
