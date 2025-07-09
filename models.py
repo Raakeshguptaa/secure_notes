@@ -1,5 +1,7 @@
-from database import engine
-from database import base , Column , Integer,String,ForeignKey , relationship
+from database import engine, relationship
+from database import base 
+from sqlalchemy import  Column , Integer,String,ForeignKey 
+
 
 class User(base):
     __tablename__ = "users"

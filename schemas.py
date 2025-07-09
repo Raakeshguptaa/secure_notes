@@ -17,3 +17,10 @@ class Note_model(BaseModel):
     class Config:
         orm_mode = True
 
+
+class Login_user(BaseModel):
+    username:EmailStr
+    password:str
+
+    class Config:
+        orm_mode = True

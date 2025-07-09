@@ -1,9 +1,10 @@
-from sqlalchemy import create_engine ,Integer , String , Float , Column , ForeignKey 
+from sqlalchemy import create_engine 
 from sqlalchemy.orm import sessionmaker,relationship
 from sqlalchemy.ext.declarative import declarative_base
+from config import settings
 
-
-engine = create_engine("postgresql://postgres:rakeshpostgres@localhost:5432/secure_notes", echo=True)
+engine = create_engine(f"postgresql://{settings.database_username}:{settings.database_password}"
+                       f"@{settings.database_hostname}:{settings.database_port}/{settings.database_name}", echo=True)
 
 Sessionlocal = sessionmaker(bind=engine)
 base = declarative_base()
