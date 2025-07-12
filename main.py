@@ -68,6 +68,7 @@ def login(log_user : Login_user,db:Session= Depends(get_db)):
 
 
 
+# regitering user cridential
 
 @app.post("/user",status_code=status.HTTP_201_CREATED)
 def add_user(user_data:User_model,db: Session = Depends(get_db)):
@@ -78,19 +79,23 @@ def add_user(user_data:User_model,db: Session = Depends(get_db)):
 
     db.add(user_data)
     db.commit()
-    
+    db.refresh(user_data)
+
+# adding notes
 
 @app.post("/note",status_code=status.HTTP_201_CREATED)
-def add_note(user_notes:Note_model , db:Session= Depends(get_db)):
+def add_note(user_notes:Note_model , db:Session= Depends(get_db),current_user : User = Depends(get_current_user)):
     user_notes = Note(
         id = user_notes.id,
         title = user_notes.title,
         content = user_notes.content,
-        owner_id = user_notes.owner_id
+        owner_id = current_user.id
     )
 
     db.add(user_notes)
     db.commit()
+    db.refresh(user_notes)
+    return {"msg": "Note added", "note_id": user_notes.id}
     
 
 
@@ -99,12 +104,17 @@ def user_detail(db:Session = Depends(get_db)):
 
     data = db.query(User).all()
 
-    return ("user_detail",data)
+    return ("users_detail",data)
 
 @app.get("/note_detail",status_code=status.HTTP_302_FOUND)
-def post_detail(db:Session = Depends(get_db)):
-    data = db.query(Note).all()
-    return ("note_detail",data)
+def note_detail(current_user : User = Depends(get_current_user)):
+    return [{"title": note.title,"content":note.content} for note in current_user.notes]
 
 
 
+@app.get("/notes/{note_id}")
+def read_note(note_id: int, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
+    note = db.query(Note).filter(Note.id == note_id, Note.owner_id == current_user.id).first()
+    if not note:
+        raise HTTPException(status_code=404, detail="Note not found")
+    return {"title": note.title, "content": note.content}
