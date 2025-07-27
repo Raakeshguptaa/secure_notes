@@ -52,6 +52,10 @@ def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(
         raise credentials_exception
     return user
 
+
+@app.get("/")
+def show():
+    return {"message":"hello world"}
 @app.post("/login")
 def login(log_user : Login_user,db:Session= Depends(get_db)):
 

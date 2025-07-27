@@ -1,0 +1,14 @@
+passlib[bcrypt]
+pydantic[email]
+python-jose
+psycopg2-binary
+psycopg2
+pydantic_settings
+sqlalchemy
+fastapi
+uvicorn
+bcrypt==3.2.2
+cryptography
+oauthlib==3.2.2
+PyJWT==2.7.0
+requests==2.31.0
